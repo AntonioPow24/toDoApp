@@ -29,7 +29,7 @@ export default function Header() {
 
 
   return (
-    <header className='container mx-auto px-5 pt-8' ref={refHeader}> 
+    <header className='container mx-auto px-5 pt-8 max-w-2xl' ref={refHeader}> 
     {/* se pone un ref en el elemento que deseamos, y se usa su .current para acceder */}
         <div className='flex justify-between'>
         <h1 className='uppercase text-white text-3xl font-semibold tracking-[0.35em]'>Todo</h1>
