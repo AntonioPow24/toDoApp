@@ -1,4 +1,6 @@
 
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import React, { useEffect, useState } from 'react'
 
 import Header from './Components/Header'
@@ -8,6 +10,20 @@ import TodoComputed from './Components/TodoComputed'
 import TodoFilter from './Components/TodoFilter'
 
 const initialStateToDos=JSON.parse(localStorage.getItem('todos')) || []
+
+// Reordenar toDos por el DRAG and DROP
+const reorder = (array,startIndex, endIndex) =>{
+  const copyArray = [...array] // Copiar de larrayTodos
+
+  // Elemento a mover
+  const [itemRemoved] = copyArray.splice(startIndex,1)
+
+  // Elemento reordenado
+  copyArray.splice(endIndex,0,itemRemoved)
+
+  //Nueva lista reordenada
+  return copyArray
+}
 
 
 export default function App() {
@@ -78,8 +94,18 @@ export default function App() {
 
 
 
+  // Funcion para el DRAG and DROP
+  const handleDropDrag = result =>{
 
+    const {destination,source} = result
 
+    if(!destination) return
+
+    if(source.index === destination.index && source.droppableId === destination.droppableId) return
+
+    setToDos(prevTasks => reorder(prevTasks,source.index,destination.index))
+  }
+  
   return (
     <div className='bg-slate-200 bg-[url("./assets/images/bg-mobile-light.jpg")] bg-no-repeat bg-contain  min-h-screen dark:bg-slate-900 dark:bg-[url("./assets/images/bg-mobile-dark.jpg")] transition-all	duration-500 md:bg-[url("./assets/images/bg-desktop-light.jpg")] dark:md:bg-[url("./assets/images/bg-desktop-dark.jpg")]'>
       
@@ -89,8 +115,22 @@ export default function App() {
 
         <TodoCreate createToDo={createToDo}/>
 
-        <TodoList toDos={filteredToDos()} updateToDo={updateToDo}  deleteToDo={deleteToDo}/>
-        
+
+
+
+      <DragDropContext onDragEnd={handleDropDrag}>
+
+        <TodoList 
+          toDos={filteredToDos()} 
+          updateToDo={updateToDo}  
+          deleteToDo={deleteToDo}
+        />
+
+      </DragDropContext>
+
+
+
+
         <TodoComputed computedToDosLeft={computedToDosLeft} clearCompleted={clearCompleted}/>
 
         <TodoFilter changeFilter={changeFilter} filter={filter}/>

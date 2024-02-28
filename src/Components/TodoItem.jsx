@@ -2,7 +2,7 @@ import React from 'react'
 import IconCross from './icons/IconCross'
 import IconCheck from './icons/IconCheck'
 
-export default function TodoItem({toDo,updateToDo,deleteToDo}) {
+const TodoItem = React.forwardRef(({toDo,updateToDo,deleteToDo, ...props},ref) =>{
 
   const {title,completed,id}=toDo
 
@@ -13,7 +13,7 @@ export default function TodoItem({toDo,updateToDo,deleteToDo}) {
 
 
   return (
-    <article className='bg-white flex items-center gap-4 py-4 border-b-slate-300   border-b dark:bg-slate-700 dark:border-b-slate-500 transition-all	duration-500'>
+    <article  ref={ref} className='bg-white flex items-center gap-4 py-4 border-b-slate-300   border-b dark:bg-slate-700 dark:border-b-slate-500 transition-colors	duration-500' {...props}>
 
         <button
           className={`rounded-full w-5 h-5 border border-slate-300 dark:border-slate-500  ${buttonStyle} transition-all	duration-500`} 
@@ -35,4 +35,6 @@ export default function TodoItem({toDo,updateToDo,deleteToDo}) {
         </button>
     </article>
   )
-}
+})
+
+export default TodoItem
